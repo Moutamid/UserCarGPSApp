@@ -12,13 +12,16 @@ public class CarDetails {
     private String distance;
     private String consumption;
     private String time;
+    private double lat;
+    private double lng;
     private String status;
 
     public CarDetails(){
 
     }
 
-    public CarDetails(String id, String car, String username, String email, String password, String speed, String location, String distance, String consumption, String time, String status) {
+    public CarDetails(String id, String car, String username, String email, String password, String speed,
+                      String location,double lat,double lng, String distance, String consumption, String time, String status) {
         this.id = id;
         this.car = car;
         this.username = username;
@@ -26,10 +29,20 @@ public class CarDetails {
         this.password = password;
         this.speed = speed;
         this.location = location;
+        this.lat = lat;
+        this.lng = lng;
         this.distance = distance;
         this.consumption = consumption;
         this.time = time;
         this.status = status;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
     public String getId() {

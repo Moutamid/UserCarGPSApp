@@ -21,6 +21,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,8 +32,11 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private String distance = "50.0";
     private String location = "";
     private LocationRequest locationRequest;
+    RadioButton stopBtn,moveBtn;
+    int selectedRadioId;
+    RadioGroup radioGroup1;
 
 
     @Override
@@ -63,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        radioGroup1 = (RadioGroup)findViewById(R.id.radioGroup1);
+        stopBtn=findViewById(R.id.stop);
+        moveBtn = findViewById(R.id.moving);
         db = FirebaseDatabase.getInstance().getReference().child("Car");
 
         checkInternetAndGPSConnection();
@@ -73,11 +84,50 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         } else {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.CALL_PHONE}, REQUEST_LOCATION);
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION);
             showGPSDialogBox();
         }
+        radioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                if (stopBtn.isChecked()){
+                    //status = "parked";
 
+                    HashMap<String,Object> hashMap = new HashMap<>();
+                    hashMap.put("status","parked");
+                    db.child(user.getUid()).updateChildren(hashMap);
+                }else if (moveBtn.isChecked()){
+                   // status = "moving";
+
+                    HashMap<String,Object> hashMap = new HashMap<>();
+                    hashMap.put("status","moving");
+                    db.child(user.getUid()).updateChildren(hashMap);
+                }
+            }
+        });
+        checkDataExists();
+    }
+
+    private void checkDataExists() {
+        db.child(user.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            CarDetails model = snapshot.getValue(CarDetails.class);
+                            if (model.getStatus().equals("moving")){
+                                moveBtn.setChecked(true);
+                            }else {
+                                stopBtn.setChecked(true);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     protected synchronized void bulidGoogleApiClient() {
@@ -168,7 +218,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(client, locationRequest, this);
 
-
     }
 
     @Override
@@ -192,8 +241,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         time = sdf.format(resultdate);
         speed = String.valueOf(location.getSpeed());
         Log.d("lat",""+ currentLat);
-        updateDetails("moving");
-
+        updateDetails();
     }
 
     private void getCompleteAddressString(double LATITUDE, double LONGITUDE) {
@@ -218,32 +266,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        updateDetails("parked");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        updateDetails("parked");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        updateDetails("parked");
-    }
-
-    private void updateDetails(String status){
+    private void updateDetails(){
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("speed",speed);
         hashMap.put("location",location);
+        hashMap.put("lat",currentLat);
+        hashMap.put("lng",currentLng);
         hashMap.put("distance",distance);
         hashMap.put("time",time);
-        hashMap.put("status",status);
+        hashMap.put("consumption",consumption);
         db.child(user.getUid()).updateChildren(hashMap);
     }
 }

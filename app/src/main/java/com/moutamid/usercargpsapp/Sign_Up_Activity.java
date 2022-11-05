@@ -72,8 +72,8 @@ public class Sign_Up_Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     FirebaseUser user = mAuth.getCurrentUser();
-                    CarDetails model = new CarDetails(user.getUid(),car,name,email,password,"","",
-                            "","","","");
+                    CarDetails model = new CarDetails(user.getUid(),car,name,email,password,"","",0.0,0.0,
+                            "","","","parked");
                     db.child(user.getUid()).setValue(model);
                     Intent intent = new Intent(Sign_Up_Activity.this , MainActivity.class);
                     startActivity(intent);
