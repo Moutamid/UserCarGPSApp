@@ -8,43 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:958844795511:android:f9c65a4cfccf917d15e472",
-        "android_client_info": {
-          "package_name": "com.moutamid.car_gps_app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "958844795511-hi95bskd0gnk76j9hs7sb7mjha0rhti9.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.moutamid.car_gps_app",
-            "certificate_hash": "309bc07aea5fffbbbf69c8b8435d380078ec8eba"
-          }
-        },
-        {
-          "client_id": "958844795511-espsr3jl6apq2f841h4gn100j1v9o77o.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCcQ7DdzdJxaWx_CVJV-TpQfcUwu0HJLzM"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "958844795511-espsr3jl6apq2f841h4gn100j1v9o77o.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:958844795511:android:9db05723a201af7c15e472",
         "android_client_info": {
           "package_name": "com.moutamid.usercargpsapp"
@@ -52,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "958844795511-h3vr230jm964bjpdolc75sm89260lqen.apps.googleusercontent.com",
+          "client_id": "958844795511-eh4ou0qh02kfannd47tbthf9e3pv9j8i.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.moutamid.usercargpsapp",
@@ -65,6 +28,9 @@
         }
       ],
       "api_key": [
+        {
+          "current_key": "AIzaSyA_nuf2M6rmPYlG3LelZktZEYoBt5DAmoA"
+        },
         {
           "current_key": "AIzaSyCcQ7DdzdJxaWx_CVJV-TpQfcUwu0HJLzM"
         }
