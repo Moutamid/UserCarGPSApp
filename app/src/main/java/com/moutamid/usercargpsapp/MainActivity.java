@@ -52,18 +52,19 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private FirebaseUser user;
     private DatabaseReference db;
     double currentLat, currentLng = 0;
+    double startLat, startLng = 0;
     private static final int REQUEST_LOCATION = 1;
     private GoogleApiClient client;
     private String time = "";
     private String speed = "";
     private String consumption = "2.04";
-    private String distance = "50.0";
+    private String distance = "0.0";
     private String location = "";
     private LocationRequest locationRequest;
     RadioButton stopBtn,moveBtn;
     int selectedRadioId;
     RadioGroup radioGroup1;
-
+    private SharedPreferencesManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         stopBtn=findViewById(R.id.stop);
         moveBtn = findViewById(R.id.moving);
         db = FirebaseDatabase.getInstance().getReference().child("Car");
+        manager = new SharedPreferencesManager(this);
 
+      //  Toast.makeText(MainActivity.this,""+startLat,Toast.LENGTH_LONG).show();
         checkInternetAndGPSConnection();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,
@@ -92,16 +95,16 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 if (stopBtn.isChecked()){
                     //status = "parked";
-
                     HashMap<String,Object> hashMap = new HashMap<>();
                     hashMap.put("status","parked");
                     db.child(user.getUid()).updateChildren(hashMap);
                 }else if (moveBtn.isChecked()){
                    // status = "moving";
-
                     HashMap<String,Object> hashMap = new HashMap<>();
                     hashMap.put("status","moving");
                     db.child(user.getUid()).updateChildren(hashMap);
+                    manager.storeDouble("lat", (float) currentLat);
+                    manager.storeDouble("lng", (float) currentLng);
                 }
             }
         });
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                             CarDetails model = snapshot.getValue(CarDetails.class);
                             if (model.getStatus().equals("moving")){
                                 moveBtn.setChecked(true);
+
                             }else {
                                 stopBtn.setChecked(true);
                             }
@@ -240,8 +244,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Date resultdate = new Date(timestamp);
         time = sdf.format(resultdate);
         speed = String.valueOf(location.getSpeed());
+        calculateDist();
         Log.d("lat",""+ currentLat);
         updateDetails();
+    }
+
+    private void calculateDist() {
+        startLat = manager.retrieveFloat("lat",0);
+        startLng = manager.retrieveFloat("lng",0);
+        Location location1 = new Location("");
+        location1.setLatitude(startLat);
+        location1.setLongitude(startLng);
+
+        Location location2 = new Location("");
+        location2.setLatitude(currentLat);
+        location2.setLongitude(currentLng);
+
+        float distanceInMeters = location1.distanceTo(location2);
+        distance = String.valueOf(distanceInMeters);
     }
 
     private void getCompleteAddressString(double LATITUDE, double LONGITUDE) {
