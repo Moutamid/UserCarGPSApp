@@ -26,8 +26,8 @@ public class Sign_Up_Activity extends AppCompatActivity {
 
     Button sign_btn;
     LinearLayout goto_signin;
-    EditText fnameTxt,emailTxt,passTxt,carTxt;
-    String name,email,password,car;
+    EditText fnameTxt,emailTxt,passTxt,carTxt,phoneTxt;
+    String name,email,password,car,phone;
     private FirebaseAuth mAuth;
     private DatabaseReference db;
     private ProgressDialog dialog;
@@ -42,6 +42,7 @@ public class Sign_Up_Activity extends AppCompatActivity {
         fnameTxt = findViewById(R.id.fname);
         emailTxt = findViewById(R.id.email);
         passTxt = findViewById(R.id.password);
+        phoneTxt = findViewById(R.id.phone);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance().getReference().child("Car");
         sign_btn.setOnClickListener(new View.OnClickListener() {
@@ -73,7 +74,8 @@ public class Sign_Up_Activity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
                     FirebaseUser user = mAuth.getCurrentUser();
-                    CarDetails model = new CarDetails(user.getUid(),car,name,email,password,"","",0.0,0.0,
+                    CarDetails model = new CarDetails(user.getUid(),car,name,email,password,phone,"",
+                            "",0.0,0.0,
                             "","","","parked");
                     db.child(user.getUid()).setValue(model);
                     Intent intent = new Intent(Sign_Up_Activity.this , MainActivity.class);
@@ -96,6 +98,7 @@ public class Sign_Up_Activity extends AppCompatActivity {
         name = fnameTxt.getText().toString();
         email = emailTxt.getText().toString();
         password = passTxt.getText().toString();
+        phone = phoneTxt.getText().toString();
 
         if(car.isEmpty()){
             carTxt.setText("Input Car");
@@ -104,7 +107,7 @@ public class Sign_Up_Activity extends AppCompatActivity {
         }
 
         if(name.isEmpty()){
-            fnameTxt.setText("Input Email");
+            fnameTxt.setText("Input Fullname");
             fnameTxt.requestFocus();
             return false;
         }
@@ -114,6 +117,12 @@ public class Sign_Up_Activity extends AppCompatActivity {
             emailTxt.requestFocus();
             return false;
         }
+        if(phone.isEmpty()){
+            phoneTxt.setText("Input Phone");
+            phoneTxt.requestFocus();
+            return false;
+        }
+
 
 
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

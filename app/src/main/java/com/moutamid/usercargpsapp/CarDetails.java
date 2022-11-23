@@ -15,18 +15,20 @@ public class CarDetails {
     private double lat;
     private double lng;
     private String status;
+    private String phone;
 
     public CarDetails(){
 
     }
 
-    public CarDetails(String id, String car, String username, String email, String password, String speed,
+    public CarDetails(String id, String car, String username, String email, String password, String phone,String speed,
                       String location,double lat,double lng, String distance, String consumption, String time, String status) {
         this.id = id;
         this.car = car;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phone = phone;
         this.speed = speed;
         this.location = location;
         this.lat = lat;
@@ -39,6 +41,22 @@ public class CarDetails {
 
     public double getLat() {
         return lat;
+    }
+
+    public double getLng() {
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setLat(double lat) {

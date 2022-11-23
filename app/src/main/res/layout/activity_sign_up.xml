@@ -193,6 +193,44 @@
                                 android:layout_height="30dp"
                                 android:layout_margin="5dp"
                                 android:layout_gravity="center"
+                                android:src="@drawable/ic_baseline_call_24"
+                                app:tint="#808080" />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:hint="Enter Phone"
+                                android:id="@+id/phone"
+                                android:inputType="textEmailAddress"
+                                android:textColorHint="#808080"
+                                android:textColor="@color/black"
+                                android:textSize="20sp"/>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
+                        app:cardBackgroundColor="@color/white"
+                        app:cardElevation="10dp"
+                        app:cardCornerRadius="10dp"
+                        android:padding="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_margin="5dp"
+                                android:layout_gravity="center"
                                 android:src="@drawable/ic_baseline_lock_24"
                                 app:tint="#808080" />
 
